@@ -1,0 +1,7 @@
+main: "cc.dreamcode.autokey.Main"
+version: "1.0"
+name: "Dream-Autokey"
+description: "Dream-Autokey plugin written by dreamcode.cc"
+website: "https://dreamcode.cc"
+author: "kdbg"
+api-version: 1.13

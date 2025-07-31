@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.38/57f8f5e02e92a30fd21b80cbd426a4172b5f8e29/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="dream-autokey.plugin-core.nms.main" />
+        <module name="dream-autokey.plugin-core.main" />
+        <module name="dream-autokey.plugin-core.nms.api.main" />
+        <module name="dream-autokey.plugin-core.nms.test" />
+        <module name="dream-autokey.plugin-core.test" />
+        <module name="dream-autokey.plugin-core.nms.api.test" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="1.8">
+      <module name="dream-template" target="21" />
+      <module name="dream-template.main" target="21" />
+      <module name="dream-template.plugin-core.nms.v1_17_R1" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_17_R1.main" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_17_R1.test" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_18_R2" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_18_R2.main" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_18_R2.test" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_19_R2" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_19_R2.main" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_19_R2.test" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_19_R3" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_19_R3.main" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_19_R3.test" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_20_R1" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_20_R1.main" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_20_R1.test" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_20_R2" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_20_R2.main" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_20_R2.test" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_20_R3" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_20_R3.main" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_20_R3.test" target="17" />
+      <module name="dream-template.plugin-core.nms.v1_20_R5" target="21" />
+      <module name="dream-template.plugin-core.nms.v1_20_R5.main" target="21" />
+      <module name="dream-template.plugin-core.nms.v1_20_R5.test" target="21" />
+      <module name="dream-template.plugin-core.nms.v1_21_R1" target="21" />
+      <module name="dream-template.plugin-core.nms.v1_21_R1.main" target="21" />
+      <module name="dream-template.plugin-core.nms.v1_21_R1.test" target="21" />
+      <module name="dream-template.plugin-core.nms.v1_21_R2" target="21" />
+      <module name="dream-template.plugin-core.nms.v1_21_R2.main" target="21" />
+      <module name="dream-template.plugin-core.nms.v1_21_R2.test" target="21" />
+      <module name="dream-template.plugin-core.nms.v1_21_R3" target="21" />
+      <module name="dream-template.plugin-core.nms.v1_21_R3.main" target="21" />
+      <module name="dream-template.plugin-core.nms.v1_21_R3.test" target="21" />
+      <module name="dream-template.test" target="21" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

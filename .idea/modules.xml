@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugin-core/dream-autokey.plugin-core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugin-core/dream-autokey.plugin-core.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugin-core/nms/api/dream-autokey.plugin-core.nms.api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugin-core/nms/api/dream-autokey.plugin-core.nms.api.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugin-core/dream-autokey.plugin-core.test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugin-core/dream-autokey.plugin-core.test.iml" />
+    </modules>
+  </component>
+</project>
