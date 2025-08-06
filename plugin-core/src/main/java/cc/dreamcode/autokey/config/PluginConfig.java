@@ -33,7 +33,7 @@ public class PluginConfig extends OkaeriConfig {
     public Map<String, CaseConfig> cases = new HashMap<String, CaseConfig>() {{
         put("epicka", new CaseConfig(
                 10,
-                "case give %player% epicka {AMOUNT}",
+                "case giveall epicka {AMOUNT}",
                 "Rozdanie kluczy za %seconds%",
                 "Rozdano klucze!",
                 CaseConfig.TextType.TITLE
@@ -56,7 +56,7 @@ public class PluginConfig extends OkaeriConfig {
     public List<AutokeyTimeConfig> autokeyTimes = new ArrayList<>(Arrays.asList(
             new AutokeyTimeConfig(
                     "16:00",
-                    "case give %player% epicka 10",
+                    "case giveall epicka 10",
                     "Klucze zostaną rozdane za &e{remaining_time} sekund!"
             )
     ));

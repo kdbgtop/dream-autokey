@@ -85,17 +85,21 @@ public class AutokeyCommand implements CommandBase {
         task[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             int remainingSeconds = currentCountdown.decrementAndGet();
 
-            if (remainingSeconds > 0) {
-                sendCountdownNotice(sender, caseConfig, remainingSeconds);
-            } else {
-                sendExecutedNotice(sender, caseConfig);
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                if (remainingSeconds > 0) {
+                    sendCountdownNotice(player, caseConfig, remainingSeconds);
+                } else {
+                    sendExecutedNotice(player, caseConfig);
+                    String commandToExecute = caseConfig.getCommand()
+                            .replace("%player%", player.getName())
+                            .replace("{AMOUNT}", String.valueOf(amount))
+                            .replace("%amount%", String.valueOf(amount));
 
-                String commandToExecute = caseConfig.getCommand()
-                        .replace("%player%", sender.getName())
-                        .replace("{AMOUNT}", String.valueOf(amount))
-                        .replace("%amount%", String.valueOf(amount));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute);
+                }
+            });
 
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute);
+            if (remainingSeconds <= 0) {
                 task[0].cancel();
             }
         }, 0L, 20L);
