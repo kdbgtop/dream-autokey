@@ -3,3 +3,11 @@ target/
 *.iml
 .gradle/
 build
+.vscode/
+/build/
+/out/
+/.gradle/
+/gradlew
+/gradlew.bat
+.DS_Store
+*.jar

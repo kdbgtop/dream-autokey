@@ -14,7 +14,7 @@ dependencies {
     }
 
     // -- spigot api -- (base)
-    compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT")
 
     // -- dream-platform --
     implementation("cc.dreamcode.platform:bukkit:1.13.4")

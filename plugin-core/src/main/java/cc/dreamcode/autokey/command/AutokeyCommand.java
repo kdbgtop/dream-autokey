@@ -1,23 +1,28 @@
 package cc.dreamcode.autokey.command;
 
+import cc.dreamcode.autokey.bossbar.BossBarService;
+import cc.dreamcode.autokey.config.CaseConfig;
+import cc.dreamcode.autokey.config.MessageConfig;
+import cc.dreamcode.autokey.config.PluginConfig;
 import cc.dreamcode.command.CommandBase;
 import cc.dreamcode.command.DreamSender;
 import cc.dreamcode.command.annotation.*;
+import cc.dreamcode.notice.NoticeType;
 import cc.dreamcode.notice.bukkit.BukkitNotice;
-import cc.dreamcode.autokey.config.MessageConfig;
-import cc.dreamcode.autokey.config.PluginConfig;
-import cc.dreamcode.autokey.config.CaseConfig;
-import cc.dreamcode.autokey.config.PermConfig;
-import cc.dreamcode.utilities.TimeUtil;
+import cc.dreamcode.autokey.utils.TimeUtil;
 import eu.okaeri.configs.exception.OkaeriException;
 import eu.okaeri.injector.annotation.Inject;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.command.CommandSender;
-import cc.dreamcode.notice.NoticeType;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(name = "autokey")
@@ -26,20 +31,24 @@ public class AutokeyCommand implements CommandBase {
 
     private final PluginConfig pluginConfig;
     private final MessageConfig messageConfig;
+    private final BossBarService bossBarService;
     private final Plugin plugin;
 
     @Async
     @Permission("dream-autokey.reload")
     @Executor(path = "reload", description = "Przeładowuje konfiguracje.")
     public BukkitNotice reload(CommandSender sender) {
-        final long time = System.currentTimeMillis();
+        final long startTime = System.currentTimeMillis();
 
         try {
             this.messageConfig.load();
             this.pluginConfig.load();
 
+            long reloadTime = System.currentTimeMillis() - startTime;
+            String formattedReloadTime = TimeUtil.convertSecondsToDisplay(reloadTime / 1000);
+
             this.messageConfig.reloaded
-                    .with("time", TimeUtil.format(System.currentTimeMillis() - time))
+                    .with("time", formattedReloadTime)
                     .send(sender);
             return null;
         }
@@ -69,11 +78,11 @@ public class AutokeyCommand implements CommandBase {
                     .with("available_types", availableTypes);
         }
 
-        int initialCountdown = caseConfig.getCount();
+        final int initialCountdown = caseConfig.getCount();
         final AtomicInteger currentCountdown = new AtomicInteger(initialCountdown + 1);
 
         final BukkitTask[] task = new BukkitTask[1];
-        task[0] = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+        task[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             int remainingSeconds = currentCountdown.decrementAndGet();
 
             if (remainingSeconds > 0) {
@@ -86,9 +95,7 @@ public class AutokeyCommand implements CommandBase {
                         .replace("{AMOUNT}", String.valueOf(amount))
                         .replace("%amount%", String.valueOf(amount));
 
-                Bukkit.getScheduler().runTask(plugin, () ->
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute)
-                );
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute);
                 task[0].cancel();
             }
         }, 0L, 20L);
@@ -100,24 +107,33 @@ public class AutokeyCommand implements CommandBase {
     @Executor(path = "rozdaj", description = "Wykonuje komendy z configu 'perms' dla graczy posiadających odpowiednie permisje.")
     @Sender(DreamSender.Type.CLIENT)
     public BukkitNotice rozdaj() {
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            pluginConfig.perms.forEach(permConfigEntry -> {
-                if (player.hasPermission(permConfigEntry.getPerm())) {
-                    permConfigEntry.getCommands().forEach(command -> {
-                        String parsedCommand = command.replace("%player%", player.getName());
-
-                        Bukkit.getScheduler().runTask(plugin, () -> {
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parsedCommand);
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            List<String> commandsToDispatch = new ArrayList<>();
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                pluginConfig.perms.forEach(permConfigEntry -> {
+                    if (player.hasPermission(permConfigEntry.getPerm())) {
+                        permConfigEntry.getCommands().forEach(command -> {
+                            String parsedCommand = command.replace("%player%", player.getName());
+                            commandsToDispatch.add(parsedCommand);
                         });
-                    });
-                }
+                    }
+                });
             });
+            if (!commandsToDispatch.isEmpty()) {
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    commandsToDispatch.forEach(command -> {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                    });
+                });
+            }
         });
+
         return messageConfig.permsDistributed;
     }
 
     private void sendCountdownNotice(Player player, CaseConfig config, int seconds) {
-        String text = config.getText().replace("%seconds%", String.valueOf(seconds));
+        String formattedTime = TimeUtil.convertSecondsToDisplay(seconds);
+        String text = config.getText().replace("%seconds%", formattedTime);
         sendNoticeByType(player, config.getTextType(), text);
     }
 

@@ -1,27 +1,34 @@
 package cc.dreamcode.autokey.config;
 
 import eu.okaeri.configs.OkaeriConfig;
-import eu.okaeri.configs.annotation.CustomKey;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PlayersOnlineConfig extends OkaeriConfig {
 
-    @CustomKey("min")
-    private int minPlayers;
+    private final int minPlayers;
+    private final int maxPlayers;
+    private final String bossBarMessage;
+    private final String titleExecuted;
+    private final String command;
 
-    @CustomKey("max")
-    private int maxPlayers;
+    public int getMinPlayers() {
+        return minPlayers;
+    }
 
-    @CustomKey("text")
-    private String textMissingPlayers;
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
 
-    @CustomKey("text-po-rozdaniu")
-    private String textAfterDistribution;
+    public String getBossBarMessage() {
+        return bossBarMessage;
+    }
+
+    public String getTitleExecuted() {
+        return titleExecuted;
+    }
+
+    public String getCommand() {
+        return command;
+    }
 }

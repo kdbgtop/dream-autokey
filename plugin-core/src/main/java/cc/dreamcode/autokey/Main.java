@@ -1,6 +1,16 @@
 package cc.dreamcode.autokey;
 
+import cc.dreamcode.autokey.autokey.AutokeyScheduler;
+import cc.dreamcode.autokey.bossbar.BossBarService;
 import cc.dreamcode.autokey.command.AutokeyCommand;
+import cc.dreamcode.autokey.command.handler.InvalidInputHandlerImpl;
+import cc.dreamcode.autokey.command.handler.InvalidPermissionHandlerImpl;
+import cc.dreamcode.autokey.command.handler.InvalidSenderHandlerImpl;
+import cc.dreamcode.autokey.command.handler.InvalidUsageHandlerImpl;
+import cc.dreamcode.autokey.command.result.BukkitNoticeResolver;
+import cc.dreamcode.autokey.config.MessageConfig;
+import cc.dreamcode.autokey.config.PluginConfig;
+import cc.dreamcode.autokey.playersonline.PlayersOnlineScheduler;
 import cc.dreamcode.command.bukkit.BukkitCommandProvider;
 import cc.dreamcode.menu.bukkit.BukkitMenuProvider;
 import cc.dreamcode.menu.serializer.MenuBuilderSerializer;
@@ -16,15 +26,6 @@ import cc.dreamcode.platform.other.component.DreamCommandExtension;
 import cc.dreamcode.platform.persistence.DreamPersistence;
 import cc.dreamcode.platform.persistence.component.DocumentPersistenceResolver;
 import cc.dreamcode.platform.persistence.component.DocumentRepositoryResolver;
-import cc.dreamcode.autokey.command.handler.InvalidInputHandlerImpl;
-import cc.dreamcode.autokey.command.handler.InvalidPermissionHandlerImpl;
-import cc.dreamcode.autokey.command.handler.InvalidSenderHandlerImpl;
-import cc.dreamcode.autokey.command.handler.InvalidUsageHandlerImpl;
-import cc.dreamcode.autokey.command.result.BukkitNoticeResolver;
-import cc.dreamcode.autokey.config.MessageConfig;
-import cc.dreamcode.autokey.config.PluginConfig;
-import cc.dreamcode.autokey.nms.api.VersionProvider;
-import cc.dreamcode.autokey.profile.ProfileRepository;
 import cc.dreamcode.utilities.adventure.AdventureProcessor;
 import cc.dreamcode.utilities.adventure.AdventureUtil;
 import cc.dreamcode.utilities.bukkit.StringColorUtil;
@@ -39,7 +40,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public final class Main extends DreamBukkitPlatform implements DreamBukkitConfig, DreamPersistence {
 
-    @Getter private static Main instance;
+    @Getter
+    private static Main instance;
 
     @Override
     public void load(@NonNull ComponentService componentService) {
@@ -51,7 +53,7 @@ public final class Main extends DreamBukkitPlatform implements DreamBukkitConfig
 
     @Override
     public void enable(@NonNull ComponentService componentService) {
-        componentService.setDebug(false);
+        componentService.setDebug(true);
 
         this.registerInjectable(BukkitTasker.newPool(this));
         this.registerInjectable(BukkitMenuProvider.create(this));
@@ -61,27 +63,26 @@ public final class Main extends DreamBukkitPlatform implements DreamBukkitConfig
 
         componentService.registerResolver(ConfigurationResolver.class);
         componentService.registerComponent(MessageConfig.class);
+        componentService.registerComponent(PluginConfig.class);
+        componentService.registerComponent(BossBarService.class);
 
         componentService.registerComponent(BukkitNoticeResolver.class);
         componentService.registerComponent(InvalidInputHandlerImpl.class);
         componentService.registerComponent(InvalidPermissionHandlerImpl.class);
         componentService.registerComponent(InvalidSenderHandlerImpl.class);
         componentService.registerComponent(InvalidUsageHandlerImpl.class);
+        componentService.registerComponent(AutokeyCommand.class);
 
         componentService.registerComponent(PluginConfig.class, pluginConfig -> {
-            // register persistence + repositories
             this.registerInjectable(pluginConfig.storageConfig);
-
             componentService.registerResolver(DocumentPersistenceResolver.class);
             componentService.registerComponent(DocumentPersistence.class);
             componentService.registerResolver(DocumentRepositoryResolver.class);
-
-            // enable additional logs and debug messages
             componentService.setDebug(pluginConfig.debug);
         });
 
-        componentService.registerComponent(ProfileRepository.class);
-        componentService.registerComponent(AutokeyCommand.class);
+        this.getInjector().createInstance(AutokeyScheduler.class).runTaskTimerAsynchronously(this, 0L, 20L);
+        this.getInjector().createInstance(PlayersOnlineScheduler.class).runTaskTimer(this, 0L, 20L);
     }
 
     @Override
@@ -111,5 +112,4 @@ public final class Main extends DreamBukkitPlatform implements DreamBukkitConfig
             registry.registerExclusive(ItemMeta.class, new ItemMetaSerializer());
         };
     }
-
 }
