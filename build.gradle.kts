@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     id("idea")
-    id("com.gradleup.shadow") version "9.0.0-beta17"
+    id("com.gradleup.shadow") version "9.1.0"
     id("io.papermc.paperweight.userdev") version "2.0.0-beta.17" apply false
 }
 
